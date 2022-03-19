@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  test-GCC-5:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -17,15 +17,24 @@ jobs:
       - run:
           name: basic check
           command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
-      - run:
-          name: edit source and update
-          command: cd ~; echo -e "deb http://archive.ubuntu.com/ubuntu/ xenial main\ndeb http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list; mv /etc/apt/sources.list /etc/apt/sources.list_backup; awk '{ gsub(/archive.ubuntu.com/,"mirrors.tuna.tsinghua.edu.cn"); print $0 }' /etc/apt/sources.list_backup > /etc/apt/sources.list; mv /etc/apt/sources.list /etc/apt/sources.list_backup_2; awk '{ gsub(/security.ubuntu.com/,"mirrors.tuna.tsinghua.edu.cn"); print $0 }' /etc/apt/sources.list_backup_2 > /etc/apt/sources.list; apt update
       - run: 
           name: install preqs
-          command: apt install make vim git gcc-5 g++-5 gfortran-5 -y
+          command: apt install make gcc-5 g++-5 gfortran-5 -y
+      - run:
+          name: configure
+          command: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+      - run:
+          name: make
+          command: make clean; make
+      - run: 
+          name: generate initial condition file
+          command: mkdir autotest; cp -p ./build/nbody6++.sse ./autotest/; cd autotest; echo -e "1 1.0E8 1.0 40 40 0 \n100000 1 10 43532  80 1 10 \n0.01 0.01 0.15 1.0 1.0 100.0 1.0 1.0 0.7 \n0 1 1 0 1 0 4 0 0 2 \n0 1 0 2 2 0 0 0 3 6 \n1 0 2 0 0 2 0 0 0 2 \n1 0 2 1 1 0 1 1 2 0 \n0 0 0 0 0 2 3 0 1 0 \n2.5E-6 8.E-5 0.1 1.0 1.0E-06 0.01 0.125 \n2.35 150.0 0.08 0 0 0.001 0 1.0 \n0.5 0.0 0.0 0.0 \n1.78E11 13.3" > input.txt; pwd; ls -alh
+      - run:
+          name: run simulation
+          command: cd autotest; ./nbody6++.sse < input.txt
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  test-with-GCC-5:
     jobs:
-      - say-hello
+      - test-GCC-5
