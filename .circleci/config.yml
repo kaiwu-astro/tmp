@@ -44,7 +44,7 @@ jobs:
       - run:
           name: run simulation
           command: ulimit -s unlimited; cd autotest; export OMP_NUM_THREADS=32; export execname=`ls nbody6++*`; ./$execname < 10k.test
-  test-100k:
+  test-no_dat10:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -77,7 +77,7 @@ jobs:
             mkdir autotest; 
             cp -p ./build/nbody6++* ./autotest/; 
             cd autotest; 
-            wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kepler_100k_test/100k.inp; 
+            wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kai_1k_no_dat-10/1k.inp; 
             pwd; ls -alh
       - run:
           name: run simulation
@@ -86,11 +86,11 @@ jobs:
             cd autotest; 
             export OMP_NUM_THREADS=32; 
             export execname=`ls nbody6++*`; 
-            ./$execname < 100k.inp
+            ./$execname < 1k.inp
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   test-simulation:
     jobs:
-      - test-100k
+      - test-no_dat10
       - test-10k-with-dat-10
