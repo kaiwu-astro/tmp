@@ -7,23 +7,57 @@ on:
     branches: [ stable , dev ]
 
 jobs:
-  test-small-simulation:
+  test-with-gcc-5-ubuntu18:
     runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
     
     - name: install dependencies
-      run: sudo apt-get install -y gfortran-5 gcc-5 g++-5
+      run: sudo apt-get install -y wget gfortran-5 gcc-5 g++-5
     
     - name: configure
-      run: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+      run: >
+        export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; 
+        ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       
     - name: make
       run: make clean; make
       
     - name: prepare simulation
-      run: mkdir autotest; cp -p ./build/nbody6++.sse ./autotest/; cd autotest; echo -e "1 1.0E8 1.0 40 40 0 \n100000 1 10 43532  80 1 10 \n0.01 0.01 0.15 1.0 1.0 100.0 1.0 1.0 0.7 \n0 1 1 0 1 0 4 0 0 2 \n0 1 0 2 2 0 0 0 3 6 \n1 0 2 0 0 2 0 0 0 2 \n1 0 2 1 1 0 1 1 2 0 \n0 0 0 0 0 2 3 0 1 0 \n2.5E-6 8.E-5 0.1 1.0 1.0E-06 0.01 0.125 \n2.35 150.0 0.08 0 0 0.001 0 1.0 \n0.5 0.0 0.0 0.0 \n1.78E11 13.3" > input.txt; pwd; ls -alh
+      run: >
+        mkdir autotest; 
+        cp -p ./build/nbody6++.sse ./autotest/; 
+        cd autotest; 
+        wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kepler_100k_test/100k.inp; 
+        pwd; ls -alh
     
     - name: simulation
-      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < input.txt
+      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < 100k.inp
+      
+  test-with-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install dependencies
+      run: sudo apt-get install -y wget gfortran gcc g++
+    
+    - name: configure
+      run: >
+        ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+      
+    - name: make
+      run: make clean; make
+      
+    - name: prepare simulation
+      run: >
+        mkdir autotest; 
+        cp -p ./build/nbody6++.sse ./autotest/; 
+        cd autotest; 
+        wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kepler_100k_test/100k.inp; 
+        pwd; ls -alh
+    
+    - name: simulation
+      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < 100k.inp
