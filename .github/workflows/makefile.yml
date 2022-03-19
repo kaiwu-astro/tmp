@@ -29,11 +29,11 @@ jobs:
         mkdir autotest; 
         cp -p ./build/nbody6++.sse ./autotest/; 
         cd autotest; 
-        wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kepler_100k_test/100k.inp; 
+        wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kai_1k_no_dat-10/1k.inp; 
         pwd; ls -alh
     
     - name: simulation
-      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < 100k.inp
+      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < 1k.inp
       
   test-with-latest:
     runs-on: ubuntu-latest
@@ -56,8 +56,8 @@ jobs:
         mkdir autotest; 
         cp -p ./build/nbody6++.sse ./autotest/; 
         cd autotest; 
-        wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kepler_100k_test/100k.inp; 
+        wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kai_1k_no_dat-10/1k.inp; 
         pwd; ls -alh
     
     - name: simulation
-      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < 100k.inp
+      run: ulimit -s unlimited; cd autotest; ./nbody6++.sse < 1k.inp
