@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  test-GCC-5:
+  test-GCC-9:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -19,10 +19,10 @@ jobs:
           command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
       - run: 
           name: install preqs
-          command: apt update; apt install wget make gcc-5 g++-5 gfortran-5 -y
+          command: apt update; apt install wget make gcc-9 g++-9 gfortran-9 -y
       - run:
           name: configure
-          command: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+          command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: make
           command: make clean; make -j
@@ -35,6 +35,6 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  test-with-GCC-5:
+  test-with-GCC-9:
     jobs:
-      - test-GCC-5
+      - test-GCC-9
