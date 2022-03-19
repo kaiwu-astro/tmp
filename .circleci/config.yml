@@ -15,9 +15,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: check system version
-          command: cat /etc/os-release
-
+          name: basic check
+          command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
+      - run:
+          name: edit source and update
+          command: cd ~; echo -e "deb http://archive.ubuntu.com/ubuntu/ xenial main\ndeb http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list; mv /etc/apt/sources.list /etc/apt/sources.list_backup; awk '{ gsub(/archive.ubuntu.com/,"mirrors.tuna.tsinghua.edu.cn"); print $0 }' /etc/apt/sources.list_backup > /etc/apt/sources.list; mv /etc/apt/sources.list /etc/apt/sources.list_backup_2; awk '{ gsub(/security.ubuntu.com/,"mirrors.tuna.tsinghua.edu.cn"); print $0 }' /etc/apt/sources.list_backup_2 > /etc/apt/sources.list; apt update
+      - run: 
+          name: install preqs
+          command: apt install make vim git gcc-5 g++-5 gfortran-5 -y
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
