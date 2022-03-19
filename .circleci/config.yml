@@ -19,7 +19,7 @@ jobs:
           command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
       - run: 
           name: install preqs
-          command: apt install make gcc-5 g++-5 gfortran-5 -y
+          command: apt update; apt install make gcc-5 g++-5 gfortran-5 -y
       - run:
           name: configure
           command: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
