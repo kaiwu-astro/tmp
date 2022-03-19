@@ -14,10 +14,10 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: install dependencies
-      run: sudo apt-get install -y gfortran-5 gcc-5 g++-5
+      run: sudo apt-get install -y gfortran-4 gcc-4 g++-4
     
     - name: configure
-      run: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+      run: export CC=gcc-4; export CXX=g++-4; export FC=gfortran-4; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       
     - name: make
       run: make clean; make
