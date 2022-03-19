@@ -19,7 +19,7 @@ jobs:
           command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
       - run: 
           name: install preqs
-          command: apt update; apt install wget make gcc g++ gfortran -y; gfortran -v
+          command: apt install software-properties-common; add-apt-repository ppa:ubuntu-toolchain-r/test; apt update; apt install wget make gcc-9 g++-9 gfortran-9 -y; gfortran -v
       - run:
           name: configure
           command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
