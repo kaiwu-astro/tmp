@@ -17,12 +17,18 @@ jobs:
       - run:
           name: basic check
           command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
+      # - run: 
+      #     name: install preqs
+      #     command: apt update; apt install software-properties-common -y; add-apt-repository ppa:ubuntu-toolchain-r/test -y; apt update; apt install wget make gcc-9 g++ gfortran -y; gfortran -v
       - run: 
           name: install preqs
-          command: apt update; apt install software-properties-common -y; add-apt-repository ppa:ubuntu-toolchain-r/test -y; apt update; apt install wget make gcc-9 g++ gfortran -y; gfortran -v
+          command: apt update; apt install wget make gcc g++ gfortran -y; gfortran -v
+      # - run:
+      #     name: configure
+      #     command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: configure
-          command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+          command: ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: make
           command: make clean; make -j
