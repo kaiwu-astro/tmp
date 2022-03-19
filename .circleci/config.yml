@@ -22,7 +22,7 @@ jobs:
           command: apt update; apt install wget make gcc-5 g++-5 gfortran-5 -y
       - run:
           name: configure
-          command: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+          command: export CC=gcc-5; export CXX=g++-5; export FC=gfortran-5; export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=no --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: make
           command: make clean; make -j
