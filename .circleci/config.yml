@@ -86,7 +86,7 @@ jobs:
             cd autotest; 
             export OMP_NUM_THREADS=32; 
             export execname=`ls nbody6++*`; 
-            ./$execname < 10k.test
+            ./$execname < 100k.inp
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
