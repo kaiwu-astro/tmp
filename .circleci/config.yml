@@ -31,7 +31,7 @@ jobs:
           command: mkdir autotest; cp -p ./build/nbody6++* ./autotest/; cd autotest; wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kai_10k/10k.test; wget https://github.com/kaiwu-astro/garage/raw/main/Nbody6ppGPU-inputfile/kai_10k/dat.10; pwd; ls -alh
       - run:
           name: run simulation
-          command: cd autotest; export OMP_NUM_THREADS=32; export execname=`ls nbody6++*`; ./$execname < 10k.test
+          command: ulimit -s unlimited; cd autotest; export OMP_NUM_THREADS=32; export execname=`ls nbody6++*`; ./$execname < 10k.test
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
