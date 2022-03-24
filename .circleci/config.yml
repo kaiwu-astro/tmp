@@ -43,7 +43,12 @@ jobs:
             pwd; ls -alh
       - run:
           name: run simulation
-          command: ulimit -s unlimited; cd autotest; export OMP_NUM_THREADS=32; export execname=`ls nbody6++*`; ./$execname < 10k.test
+          command: >
+            ulimit -s unlimited; 
+            cd autotest; 
+            export OMP_NUM_THREADS=$((`grep -c processor /proc/cpuinfo` < 32 ? `grep -c processor /proc/cpuinfo` : 32)); 
+            export execname=`ls nbody6++*`; 
+            ./$execname < 10k.test
   test-no_dat10:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
@@ -56,13 +61,13 @@ jobs:
       - checkout
       - run:
           name: basic check
-          command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh
+          command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh; nvidia-smi
       # - run: 
       #     name: install preqs
       #     command: apt update; apt install software-properties-common -y; add-apt-repository ppa:ubuntu-toolchain-r/test -y; apt update; apt install wget make gcc-9 g++ gfortran -y; gfortran -v
       - run: 
           name: install preqs
-          command: apt update; apt install wget make gcc g++ gfortran -y; gfortran -v
+          command: sudo apt update; sudo apt install wget make gcc g++ gfortran -y; gfortran -v
       # - run:
       #     name: configure
       #     command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
@@ -85,7 +90,7 @@ jobs:
           command: >
             ulimit -s unlimited; 
             cd autotest; 
-            export OMP_NUM_THREADS=32; 
+            export OMP_NUM_THREADS=$((`grep -c processor /proc/cpuinfo` < 32 ? `grep -c processor /proc/cpuinfo` : 32)); 
             export execname=`ls nbody6++*`; 
             ./$execname < 1k.inp
 # Invoke jobs via workflows
