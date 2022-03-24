@@ -47,8 +47,9 @@ jobs:
   test-no_dat10:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: ubuntu:16.04
+    machine:
+      resource_class: gpu.nvidia.small
+      image: ubuntu-1604-cuda-10.1:201909-23
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -67,7 +68,7 @@ jobs:
       #     command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: configure
-          command: ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
+          command: ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi
       - run:
           name: make
           command: make clean; make -j
