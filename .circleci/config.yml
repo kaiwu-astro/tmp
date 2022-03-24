@@ -59,9 +59,11 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      - run: nvidia-smi
+      - run: docker run --gpus all nvidia/cuda:9.0-base nvidia-smi
       - run:
           name: basic check
-          command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh; nvidia-smi
+          command: cat /etc/os-release; pwd; ls -alh; ls ~ -alh; 
       # - run: 
       #     name: install preqs
       #     command: apt update; apt install software-properties-common -y; add-apt-repository ppa:ubuntu-toolchain-r/test -y; apt update; apt install wget make gcc-9 g++ gfortran -y; gfortran -v
