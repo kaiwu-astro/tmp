@@ -10,8 +10,7 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       - image: ubuntu:16.04
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    resource_class: xlarge
     steps:
       - checkout
       - run:
@@ -50,15 +49,12 @@ jobs:
             export execname=`ls nbody6++*`; 
             ./$execname < 10k.test
   test-no_dat10:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     # machine:
       # resource_class: gpu.nvidia.small
       # image: ubuntu-1604-cuda-10.1:201909-23
     docker:
       - image: ubuntu:16.04
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    resource_class: xlarge
     steps:
       - checkout
       # - run: nvidia-smi
