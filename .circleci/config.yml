@@ -77,7 +77,7 @@ jobs:
       #     command: export FCFLAGS="-g -O0 -fcheck=all -Wall"; export CFLAGS=$FCFLAGS; export CXXFLAGS=$FCFLAGS; ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: configure
-          command: ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi
+          command: ./configure --with-par=b1m --enable-simd=sse --enable-mcmodel=large --disable-mpi --disable-gpu
       - run:
           name: make
           command: make clean; make -j
