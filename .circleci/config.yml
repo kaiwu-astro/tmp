@@ -10,7 +10,7 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       - image: ubuntu:16.04
-    resource_class: xlarge
+    resource_class: large
     steps:
       - checkout
       - run:
@@ -45,7 +45,7 @@ jobs:
           command: >
             ulimit -s unlimited; 
             cd autotest; 
-            export OMP_NUM_THREADS=$((`grep -c processor /proc/cpuinfo` < 32 ? `grep -c processor /proc/cpuinfo` : 32)); 
+            export OMP_NUM_THREADS=4; 
             export execname=`ls nbody6++*`; 
             ./$execname < 10k.test
   test-no_dat10:
@@ -54,7 +54,7 @@ jobs:
       # image: ubuntu-1604-cuda-10.1:201909-23
     docker:
       - image: ubuntu:16.04
-    resource_class: xlarge
+    resource_class: large
     steps:
       - checkout
       # - run: nvidia-smi
@@ -90,7 +90,7 @@ jobs:
           command: >
             ulimit -s unlimited; 
             cd autotest; 
-            export OMP_NUM_THREADS=$((`grep -c processor /proc/cpuinfo` < 32 ? `grep -c processor /proc/cpuinfo` : 32)); 
+            export OMP_NUM_THREADS=4; 
             export execname=`ls nbody6++*`; 
             ./$execname < 1k.inp
 # Invoke jobs via workflows
